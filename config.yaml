@@ -1,0 +1,119 @@
+path:
+  colab: "/content/drive/MyDrive/Colab_Notebooks/Boost Camp AI Tech/Text Sentimental Classification"
+
+wandb:
+  project: "Text Sentimental Classification" # 기록이 저장될 폴더명
+  notes: "LoRA test"      # 실험에 대한 간단한 설명
+  name: "LoRA test"       # 실험 데이터명
+
+model:
+  name: "klue/bert-base"     # 허용된 모델 # klue/roberta-base, klue/bert-base, kykim/bert-kor-base, beomi/kcbert-base, monologg/koelectra-base-v3-discriminator
+  num_classes: 4
+  hidden_dropout: 0.1
+  atten_dropout: 0.1
+  classifier_dropout: 0.3
+  class_label:
+  - 0
+  - 1
+  - 2
+  - 3
+  
+  use_LoRA: true        # "query", "key", "value", "dense"
+  r: 16
+  lora_alpha: 32
+  target_modules:
+    - "query"
+    - "value"
+  lora_dropout: 0.1
+  bias: "none"
+
+
+train:
+  epoch: 4                       # 학습 에포크 설정
+  batch_size: 32                  # 학습 배치 설정
+  num_workers: 6                  # 데이터로더 워커 설정
+  mixed_precision: true           # 학습 속도, 메모리 최적화 옵션
+  gradient_accum: 1               # 유효 배치 배수 (배치놈에는 소용 없음)
+
+valid:
+  epoch: 1                        # 검증 수행 주기
+  batch_size: 128                  # 검증 배치 설정
+  num_workers: 6                  # 데이터로더 워커 설정
+
+optimizer:
+  name: "adamW"             # 최적자 설정
+  learning_rate: 2e-4       # 학습률 설정
+  weight_decay: 1e-2        # 가중최 감쇠
+
+scheduler:
+  linear:                   # Warm-Up 스케줄러
+    use: true              # LinearLR on/off
+    warmup_epoch: 1         # warmup 기간
+
+  cosine:                   # Cosine계열 스케줄러
+    anneal: true           # CosineAnnealing on/off
+    restart: false           # CosineAnnealingWarmRestart on/off
+    eta_min: 1e-6           # 최저 학습률
+    period: 3              # 스케줄러 반복 주기
+
+loss:
+  ce:
+    use: true
+
+  class_weight_ce:
+    use: false
+
+  smooth_ce:
+    use: false
+    smooth: 0.1
+
+  class_weight_smooth_ce:
+    use: false
+    smooth: 0.1
+
+  focal:
+    use: false
+    alpha: 0.25
+    gamma: 2
+
+  smooth_focal:
+    use: false
+    alpha: 0.25
+    gamma: 2
+    smooth: 0.1
+
+  focal_class_weight:
+    use: false
+    gamma: 2
+
+  smooth_focal_class_weight:
+    use: false
+    gamma: 2
+    smooth: 0.1
+
+tokenizer:
+  max_length: 64
+
+  new_tokens:
+    - 'oo'
+    - 'ㅠ'
+    - 'ㅠㅠ'
+    - 'ㅡㅡ'
+    - 'ㅡㅅㅡ'
+    - 'ㅗ'
+    - '^^'
+    - '♥'
+    - '막장'
+    - '씨발'
+    - '용두사미'
+    - '망작'
+    - '걸작'
+    - '꿀잼'
+    - '노잼'
+    - '오열'
+    - '남주'
+
+  special_tokens:
+  - '[neg_ex]' 
+
+seed: 13
