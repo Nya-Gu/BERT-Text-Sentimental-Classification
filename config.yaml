@@ -18,7 +18,7 @@ model:
   - 2
   - 3
   
-  use_LoRA: true        # "query", "key", "value", "dense"
+  use_LoRA: false        # "query", "key", "value", "dense"
   r: 16
   lora_alpha: 32
   target_modules:
