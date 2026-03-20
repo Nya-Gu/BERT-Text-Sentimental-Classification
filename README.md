@@ -139,11 +139,32 @@ Hanspell을 사용하고 [UNK] 토큰으로 처리되는 문장이 줄어들었�
 |klue/bert-base|-|81.17%|
 |klue/bert-base|+새 토큰 추가|81.20%|
 |klue/bert-base|+새 토큰 추가, Hanspell 교정|80.72%|
-|kykim/bert-base|+새 토큰 추가|82.35% (성능 하락)|
-|kykim/bert-base|+새 토큰 추가, Hanspell 교정|81.80% (성능 하락)|
+|kykim/bert-base|+새 토큰 추가|82.35%|
+|kykim/bert-base|+새 토큰 추가, Hanspell 교정|81.80%|
 
 ## 6. 모델 성능 실험
-ㅇㅇ
+
+아래를 기본 설정으로 하여 이번 프로젝트에서 사용이 허가된 다섯 모델을 풀-파인튜닝했습니다. 
+- LR = 2e-5
+- Batch = 64
+- Max_seq_length = 64
+- Data: Original + LLM (rare class)
+- Preprocessing:
+  - TextPreprocessingPipeline 클래스 보강
+  - Proofreading 함수 추가
+  - 새 Token 추가
+
+| 모델 | 사전훈련에 쓰인 데이터 | Vocab 사이즈 | Val Acc. |
+|:------:|:--------------------:|:------------:|:--------:|
+|klue/bert-base|종합 데이터|32000|81.20%|
+|kykim/bert-base|블로그, 댓글, 리뷰|42000|82.35%|
+|klue/roberta-base|종합 데이터|32000|81.78%|
+|beomi/kcbert-base|뉴스 댓글, 대댓글|30000|80.38%|
+|monologg/koelectra-base-v3-discriminator|뉴스, 위키, 나무위키|35000|81.42%|
+
+1. 논문([링크](https://arxiv.org/abs/1905.05583))을 참고해 일부 레이어만 파인튜닝하거나 LoRA를 사용해 파인튜닝해봤지만 풀-파인튜닝보다 성능이 좋게 나오진 않았습니다.
+
+2. 위의 논문에 따르면 Further Pretraining을 수행한 뒤 파인튜닝을 하면 더 좋은 성능을 볼 수 있다고 합니다. kykim/bert-kor-base 모델이 다른 모델보다 좋은 성능을 낸 것도 이와 같은 이유가 아닐까 싶습니다. kykim/bert-kor-base 모델은 현 프로젝트에서 사용하고 있는 리뷰와 유사한 데이터(블로그, 댓글, 리뷰)로 사전훈련되었기 때문에 다른 모델에 비해 리뷰 데이터을 이해하는 데 '익숙'하고, 그로 인해 성능이 더 좋게 나온 것으로 보입니다.
 
 ## 7. 손실 함수 실험
 ㅇㅇ
