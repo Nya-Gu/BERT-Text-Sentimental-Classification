@@ -189,9 +189,40 @@ Hanspell을 사용하고 [UNK] 토큰으로 처리되는 문장이 줄어들었�
 
 ## 8. 모델 앙상블
 
+다음으로 앙상블을 진행했습니다. 정석으로 Soft Voting, Hard Voting, Stacking 세 가지를 수행했고 결과는 다음과 같습니다.
+
+| 방법 | Val Acc. | 세부 사항 |
+|:----:|:---------:|:---------|
+|Soft Voting|84.122%|모델별 가중치<br>Klue/bert-base: 0.1<br>kykim/bert-kor-base: 0.6<br>klue/roberta-base: 0.6<br>beomi/kcbert-base: 0.3<br>monologg/koelectra-base-v3-discriminator: 0.3|
+|Hard Voting|83.61%|-|
+|Stacking (meta learning)|83.98%|MLP_Classifier(in_size = 20, out_size = 4, inner_width  = 32, depth = 1, dropout = 0.1)|
+
+앙상블을 하는 건 이번이 처음이었습니다. 시작하기 전에는 Stacking이 Soft Voting의 상위 호환인 기법이라고 생각하고 가장 성능이 좋게 나올 거라고 생각했습니다. 하지만 결과는 그렇지 않았고, 그 이유는 나름 고민해봤습니다. Soft Voting은 최고 성능을 낳는 가중치 조합을 직접적으로 찾는 방법인 반면, Stacking은 목적 함수(CE)를 최소화하는 가중치를 찾는 간접적인 방법이기에 애초에 Stacking이 Soft Voting의 상위 호환인 기법이 아니었던 것 같습니다. 따라서 성능이 항상 더 좋게 나올 이유가 없었던 것 같습니다.
+
+MLP Classifier 외에 LightGBM 같은 Tree 기법이나 랜덤 서치를 사용해봤으나 모두 성능이 Soft Voting에는 미치지 못했습니다. Tree 기반 Stacking은 아직 익숙하지 않은 탓에 성능이 다소 낮게 나온 측면도 있을 거라고 생각합니다.
+
+추가로 정석적인 앙상블 기법 외에 제 맘대로 모델을 앙상블 해봤습니다. 긍정/부정을 분류하는 모델과 감정의 강/약을 분류하는 모델 등을 학습시켜고 다양한 방식으로 조합해봤지만 성능은 좋지 않았습니다. Soft Voting, Hard Voting 같은 기법이 괜히 정석인 게 아닌 모양입니다.
+
+앙상블에서 어느 모델이 가장 성능에 크게 기여하고 있는지 한번 확인해봤습니다. 각 모델을 앙상블에 쓰이지 않았을 때 성능이 얼마나 하락하는지를 기록했습니다.
+
+| 모델 | Val Acc. | 세부 사항 |
+|:----:|:--------:|:---------:|
+|All|84.129%|best weight: (0.1, 0.6, 0.6, 0.3, 0.3)|
+|- klue/bert-base|84.087% (0.042%⬇️)|best weight: (X, 1.0, 1.0, 0.4, 0.5)|
+|- kykim/bert-base|83.829% (0.300%⬇️)|best weight: (0.4, X, 0.6, 0.5, 0.2)|
+|- klue/roberta-base|83.712% (0.417%⬇️)|best weight: (0.8, 0.6, X, 0.7, 0.4)|
+|- beomi/kcbert-base|84.012% (0.117%⬇️)|best weight: (0.4, 0.5, 0.5, X, 0.1)|
+|- monologg/koelectra-base-v3-discriminator|84.071% (0.058%⬇️)|best weight: (0.9, 0.8, 1.0, 0.3, X)|
+
+위 결과를 토대로 앙상블 성능에 가장 크게 기여한 모델을 순서대로 나열하면 다음과 같을 것 같습니다.
+1. klue/roberta-base
+2. kykim/bert-kor-base
+3. Klue/bert-base
+4. beomi/kcbert-base
+5. koelectra
 
 ## 9. 최종 결과
 ㅇㅇ
 
-## 9. 프로젝트 소감
+## 10. 프로젝트 소감
 ㅇㅇ
