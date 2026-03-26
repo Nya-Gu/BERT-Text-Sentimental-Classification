@@ -139,10 +139,8 @@ Hanspell을 사용하고 [UNK] 토큰으로 처리되는 문장이 줄어들었�
 | 모델 | 추가 전처리 | Val Acc. |
 |:------:|:--------:|:---------:|
 |klue/bert-base|-|81.17%|
-|klue/bert-base|+새 토큰 추가|81.20%|
+|klue/bert-base|+새 토큰 추가|**81.20%**|
 |klue/bert-base|+새 토큰 추가, Hanspell 교정|80.72%|
-|kykim/bert-base|+새 토큰 추가|82.35%|
-|kykim/bert-base|+새 토큰 추가, Hanspell 교정|81.80%|
 
 ## 6. 모델 성능 실험
 
@@ -175,7 +173,7 @@ Hanspell을 사용하고 [UNK] 토큰으로 처리되는 문장이 줄어들었�
 | 모델 | 손실 함수 | Val Acc. |
 |:----:|:---------:|:--------:|
 |klue/bert-base| Smooth CE 0.05 | 81.07% |
-|klue/bert-base| Smooth CE 0.10 | 81.22% |
+|klue/bert-base| Smooth CE 0.10 | **81.22%** |
 |klue/bert-base| Smooth CE 0.10 + Class weight | 80.61% |
 |klue/bert-base| Focal | 80.97% |
 
@@ -195,7 +193,7 @@ Hanspell을 사용하고 [UNK] 토큰으로 처리되는 문장이 줄어들었�
 
 | 방법 | Val Acc. | 세부 사항 |
 |:----:|:---------:|:---------|
-|Soft Voting|84.122%|모델별 가중치<br>Klue/bert-base: 0.1<br>kykim/bert-kor-base: 0.6<br>klue/roberta-base: 0.6<br>beomi/kcbert-base: 0.3<br>monologg/koelectra-base-v3-discriminator: 0.3|
+|Soft Voting|**84.122%**|모델별 가중치<br>Klue/bert-base: 0.1<br>kykim/bert-kor-base: 0.6<br>klue/roberta-base: 0.6<br>beomi/kcbert-base: 0.3<br>monologg/koelectra-base-v3-discriminator: 0.3|
 |Hard Voting|83.61%|-|
 |Stacking (meta learning)|83.98%|MLP_Classifier(in_size = 20, out_size = 4, inner_width  = 32, depth = 1, dropout = 0.1)|
 
