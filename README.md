@@ -68,7 +68,7 @@ HuggingFace의 Transformers 라이브러리에 있는 AutoModelForSequenceClassi
 | Dropout | Batch size | Learning rate | Max Seq Length | Val Acc. | Training time (L4 GPU) |
 |:-------:|:----------:|:-------------:|:--------------:|:--------:|:----------------------:|
 |X|32|2e-5|64|80.26%|23분(5.8분/epoch)|
-|O|32|2e-5|64|80.71%|23분(5.8분/epoch)|
+|O|32|2e-5|64|**80.71%**|23분(5.8분/epoch)|
 
 Dropout 적용은 필수인 것 같습니다. 상세한 설정은 config.yaml 파일 참고 바랍니다.
 
@@ -90,7 +90,7 @@ EDA를 통해 데이터의 클래스 불균형을 확인했습니다.
 | Data | Val Acc. | Training Time (L4 GPU) |
 |:----:|:--------:|:----------------------:|
 |Original|80.71%|23분(5.8분/epoch)|
-|Original+LLM (only rare class)|81.00%|29분(7.3분/epoch)|
+|Original+LLM (only rare class)|**81.00%**|29분(7.3분/epoch)|
 
 Original 데이터와 LLM 생성 데이터의 분포가 상당히 달랐음에도 데이터 증강이 효과가 있었습니다. LLM 데이터는 텍스트 길이가 긴 편이고 Max Seq Length=64로 설정했기 때문에 뒷내용이 많이 잘렸을 것입니다. 하지만 앞내용만으로도 충분히 클래스 예측이 가능했던 것으로 보입니다.
 
@@ -120,7 +120,7 @@ EDA를 통해 이상 데이터에서 중복 리뷰가 큰 비중을 차지하고
 |:------:|:--------:|
 |Baseline|81.00%|
 |Baseline 전처리 보강|81.09%|
-|Baseline 전처리 보강 + Proofreading 함수 추가|81.17%|
+|Baseline 전처리 보강 + Proofreading 함수 추가|**81.17%**|
 
 ## 5. 토큰 추가, 교정기 시험
 
@@ -225,7 +225,7 @@ MLP Classifier 외에 LightGBM 같은 Tree 기법이나 랜덤 서치를 사용�
 
 ## 9. 최종 결과
 
-최종 성능은 Soft Voting을 사용한 84.122% 입니다.
+최종 성능은 Soft Voting을 사용한 **84.122%** 입니다.
 각 모델의 Confusion matrix는 아래와 같습니다. 행을 기준으로 normalize 되어있으며 행은 정답 클래스, 열은 모델의 예측 클래스입니다.
 
 <img width="1434" height="173" alt="image" src="https://github.com/user-attachments/assets/c122e498-1db0-4069-ace8-3a367ef926dd" />
